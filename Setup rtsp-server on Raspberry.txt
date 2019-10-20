@@ -35,8 +35,8 @@ WantedBy=multi-user.target
 
 
 enable service
-
-sudo systemctl enable webcam_shared
+cd /etc/systemd/system/
+sudo systemctl enable webcam.service
 
 
 4. set hostname
