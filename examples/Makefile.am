@@ -2,7 +2,7 @@ noinst_PROGRAMS = test-video test-ogg test-mp4 test-readme \
 		  test-launch test-sdp test-uri test-auth test-auth-digest \
 		  test-multicast test-multicast2 test-appsrc \
 		  test-video-rtx test-record test-record-auth \
-		  test-netclock test-netclock-client test-webcam-mjpeg webcam webcam_shared
+		  test-netclock test-netclock-client webcam webcam_shared
 
 #INCLUDES = -I$(top_srcdir) -I$(srcdir)
 
