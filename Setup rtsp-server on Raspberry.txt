@@ -1,0 +1,54 @@
+How to install gstreamer rtsp server
+
+1. install gstreamer
+sudo apt-get install gstreamer1.0-plugins-bad gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly gstreamer1.0-tools libgstreamer1.0-dev libgstreamer1.0-0-dbg libgstreamer1.0-0 libgstreamer-plugins-base1.0-dev
+
+2. compile rtsp-server
+git clone https://github.com/TimoErdmann/gst-rtsp-server.git
+cd gst-rtsp-server
+git checkout 1.12
+make
+sudo make install
+
+3. create Service to enable start at Boot
+
+sudo nano /etc/systemd/system/webcam.service
+paste:
+
+
+[Unit]
+Description=webcam
+After=network.target
+
+[Service]
+ExecStart=/home/pi/gst-rtsp-server/examples/webcam_shared
+WorkingDirectory=/home/pi/
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target
+
+
+enable service
+
+sudo systemctl enable webcam_shared
+
+
+4. set hostname
+sudo hostname <my-hostname>
+
+5. set static ip 
+Configure a static profile for dhcpcd in /etc/dhcpcd.conf, for example:
+
+/etc/dhcpcd.conf
+interface eth0
+static ip_address=192.168.0.10/24	
+static routers=192.168.0.1
+static domain_name_servers=192.168.0.1 8.8.8.8
+
+add a static route if necessary:
+/etc/dhcpcd.exit-hook
+ip route add 10.11.12.0/24 via 192.168.192.5
