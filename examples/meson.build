@@ -1,4 +1,5 @@
 examples = [
+  'webcam_shared',
   'test-appsrc',
   'test-appsrc2',
   'test-auth',

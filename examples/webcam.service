@@ -1,0 +1,14 @@
+[Unit]
+Description=webcam
+After=network.target
+
+[Service]
+ExecStart=/home/pi/gst-rtsp-server/examples/webcam_shared
+WorkingDirectory=/home/pi/
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target
