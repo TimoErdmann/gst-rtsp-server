@@ -51,6 +51,7 @@ main (int argc, char *argv[])
   GstRTSPServer *server;
   GstRTSPMountPoints *mounts;
   GstRTSPMediaFactory *factory;
+  GstRTSPMediaFactory *factory_hq;
 #ifdef WITH_AUTH
   GstRTSPAuth *auth;
   GstRTSPToken *token;
@@ -129,7 +130,7 @@ main (int argc, char *argv[])
   factory = gst_rtsp_media_factory_new ();
   gst_rtsp_media_factory_set_shared (factory, TRUE);
   gst_rtsp_media_factory_set_launch (factory, "( "
-      " v4l2src device=/dev/video0 ! image/jpeg,width=1920,height=1080,framerate=30/1 ! rtpjpegpay name=pay0 pt=30 max-ptime=100000000 mtu=800 "
+      " v4l2src device=/dev/video0 ! video/x-raw,width=800,height=600 ! jpegenc quality=85 ! rtpjpegpay name=pay0 pt=30 max-ptime=100000000 mtu=800 "
         ")");
 #ifdef WITH_AUTH
   /* add permissions for the user media role */
@@ -144,8 +145,30 @@ main (int argc, char *argv[])
 #endif
 #endif
 
+  factory_hq = gst_rtsp_media_factory_new ();
+  gst_rtsp_media_factory_set_shared (factory_hq, TRUE);
+  gst_rtsp_media_factory_set_launch (factory_hq, "( "
+      " v4l2src device=/dev/video0 ! image/jpeg,width=1920,height=1080,framerate=30/1 ! rtpjpegpay name=pay0 pt=96  "
+      ")");
+#ifdef WITH_AUTH
+  /* add permissions for the user media role */
+  permissions = gst_rtsp_permissions_new ();
+  gst_rtsp_permissions_add_role (permissions, "user",
+      GST_RTSP_PERM_MEDIA_FACTORY_ACCESS, G_TYPE_BOOLEAN, TRUE,
+      GST_RTSP_PERM_MEDIA_FACTORY_CONSTRUCT, G_TYPE_BOOLEAN, TRUE, NULL);
+  gst_rtsp_media_factory_set_permissions (factory_hq, permissions);
+  gst_rtsp_permissions_unref (permissions);
+#ifdef WITH_TLS
+  gst_rtsp_media_factory_set_profiles (factory_hq, GST_RTSP_PROFILE_SAVP);
+#endif
+#endif
+
+
   /* attach the test factory to the /test url */
   gst_rtsp_mount_points_add_factory (mounts, "/stream", factory);
+
+  /* attach the test factory to the /test url */
+  gst_rtsp_mount_points_add_factory (mounts, "/stream-hq", factory_hq);
 
   /* don't need the ref to the mapper anymore */
   g_object_unref (mounts);
@@ -159,9 +182,9 @@ main (int argc, char *argv[])
 
   /* start serving, this never stops */
 #ifdef WITH_TLS
-  g_print ("stream ready at rtsps://127.0.0.1:8554/stream\n");
+  g_print ("stream ready at rtsps://127.0.0.1:8554/test\n");
 #else
-  g_print ("stream ready at rtsp://127.0.0.1:8554/stream\n");
+  g_print ("stream ready at rtsp://127.0.0.1:8554/test\n");
 #endif
   g_main_loop_run (loop);
 
