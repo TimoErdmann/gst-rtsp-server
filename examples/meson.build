@@ -20,6 +20,7 @@ examples = [
   'test-video',
   'test-video-rtx',
   'webcam',
+  'webcam_shared',
 ]
 
 foreach example : examples

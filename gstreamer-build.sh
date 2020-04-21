@@ -6,13 +6,12 @@ echo $$
 echo " pkttyagent --process" $$
 echo "Press any key to continue"
 while [ true ] ; do
-read -t 10 -n 1
+read -t 500 -n 1
 if [ $? = 0 ] ; then
-exit ;
+echo "going on"
 else
 echo "waiting for the keypress"
 fi
-done
 
 
 # Create a log file of the build as well as displaying the build on the tty as it runs
@@ -45,9 +44,9 @@ sudo apt-get install -y             git python3 python3-pip python3-setuptools p
                                     libmpeg2-4-dev libopencore-amrnb-dev libopencore-amrwb-dev \
                                     libsidplay1-dev libtwolame-dev libx264-dev libusb-1.0 \
                                     python-gi-dev yasm python3-dev libgirepository1.0-dev \
-                                    libgstreamer1.0-0
+                                    #libgstreamer1.0-0
 
-pip3 install meson
+sudo pip3 install meson
 PATH=/home/pi/.local/bin:$PATH
 
 # get the repos if they're not already there
@@ -65,42 +64,47 @@ cd gstreamer
 [ ! -d gst-plugins-ugly ] && git clone https://github.com/GStreamer/gst-plugins-ugly.git
 [ ! -d gst-omx ] && git clone https://github.com/GStreamer/gst-omx.git
 
-export LD_LIBRARY_PATH=/usr/local/lib/
+#export LD_LIBRARY_PATH=/usr/local/lib/
 cd gstreamer
 meson builddir && cd builddir
 ninja
+echo "Please Autenticate"
 meson install --no-rebuild
 
 cd gst-plugins-base
 meson builddir && cd builddir
 ninja
+echo "Please Autenticate"
 meson install --no-rebuild
 cd ../..
 
 cd gst-plugins-good
 meson builddir && cd builddir
 ninja
+echo "Please Autenticate"
 meson install --no-rebuild
 cd ../..
 
 cd gst-plugins-ugly
 meson builddir && cd builddir
 ninja
+echo "Please Autenticate"
 meson install --no-rebuild
 cd ../..
 
 cd gst-plugins-bad
 meson builddir && cd builddir
 ninja
+echo "Please Autenticate"
 meson install --no-rebuild
 cd ../..
 
 # omx support
-cd gst-omx
-meson builddir && cd builddir
-ninja
-meson install --no-rebuild
-cd ../..
+#cd gst-omx
+#meson builddir && cd builddir
+#ninja
+#meson install --no-rebuild
+#cd ../..
 
 
 git clone https://github.com/TimoErdmann/gst-rtsp-server.git
@@ -108,4 +112,12 @@ cd gst-rtsp-server
 git checkout my_webcam2.0
 meson builddir && cd builddir
 ninja
+echo "Please Autenticate"
 meson install --no-rebuild
+
+cp examples/webcam_shared /home/pi/
+cp ../webcam.service /etc/systemd/system/
+sudo systemctl enable webcam.service
+
+
+done
