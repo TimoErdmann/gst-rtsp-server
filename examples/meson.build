@@ -19,6 +19,7 @@ examples = [
   'test-uri',
   'test-video',
   'test-video-rtx',
+  'webcam',
 ]
 
 foreach example : examples
