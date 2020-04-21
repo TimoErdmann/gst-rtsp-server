@@ -119,5 +119,6 @@ cp examples/webcam_shared /home/pi/
 cp ../webcam.service /etc/systemd/system/
 sudo systemctl enable webcam.service
 
+sudo ldconfig
 
 done
