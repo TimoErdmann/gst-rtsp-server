@@ -3,7 +3,7 @@ Description=webcam
 After=network.target
 
 [Service]
-ExecStart=/home/pi/webcam_shared
+ExecStart=/home/pi/webcam_stream_lq_hq
 WorkingDirectory=/home/pi/
 StandardOutput=inherit
 StandardError=inherit

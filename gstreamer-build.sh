@@ -115,7 +115,7 @@ ninja
 echo "Please Autenticate"
 meson install --no-rebuild
 
-cp examples/webcam_shared /home/pi/
+cp examples/webcam_stream_lq_hq /home/pi/
 cp ../webcam.service /etc/systemd/system/
 sudo systemctl enable webcam.service
 
