@@ -21,7 +21,6 @@ examples = [
   'test-video-rtx',
   'webcam',
   'webcam_shared',
-  'webcam_shared_lq',
   'webcam_stream_lq_hq',
 ]
 

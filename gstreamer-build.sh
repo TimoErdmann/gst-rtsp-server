@@ -44,7 +44,7 @@ sudo apt-get install -y             git python3 python3-pip python3-setuptools p
                                     libmpeg2-4-dev libopencore-amrnb-dev libopencore-amrwb-dev \
                                     libsidplay1-dev libtwolame-dev libx264-dev libusb-1.0 \
                                     python-gi-dev yasm python3-dev libgirepository1.0-dev \
-                                    #libgstreamer1.0-0
+                                    libgstreamer1.0-0
 
 sudo pip3 install meson
 PATH=/home/pi/.local/bin:$PATH
@@ -70,6 +70,7 @@ meson builddir && cd builddir
 ninja
 echo "Please Autenticate"
 meson install --no-rebuild
+cd ../..
 
 cd gst-plugins-base
 meson builddir && cd builddir
